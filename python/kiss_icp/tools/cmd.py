@@ -198,6 +198,20 @@ def kiss_icp_pipeline(
         callback=version_callback,
         is_eager=True,
     ),
+    crop_a0: int = typer.Option(
+        -1,
+        "--crop-a0",
+        show_default=False,
+        help="a0 crop",
+        rich_help_panel="Additional Options",
+    ),
+    crop_a1: int = typer.Option(
+        -1,
+        "--crop-a1",
+        show_default=False,
+        help="a1 crop",
+        rich_help_panel="Additional Options",
+    )
 ):
     # Attempt to guess some common file extensions to avoid using the --dataloader flag
     if not dataloader:
@@ -223,11 +237,13 @@ def kiss_icp_pipeline(
             sequence=sequence,
             topic=topic,
             meta=meta,
+            crop_a0=crop_a0,
+            crop_a1=crop_a1
         ),
         config=config,
         visualize=visualize,
         n_scans=n_scans,
-        jump=jump,
+        jump=jump
     ).run().print()
 
 

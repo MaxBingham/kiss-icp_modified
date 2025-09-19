@@ -45,7 +45,7 @@ class OdometryPipeline:
         config: Optional[Path] = None,
         visualize: bool = False,
         n_scans: int = -1,
-        jump: int = 0,
+        jump: int = 0
     ):
         self._dataset = dataset
         self._n_scans = (

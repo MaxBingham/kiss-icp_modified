@@ -27,13 +27,15 @@ import numpy as np
 
 
 class KITTIOdometryDataset:
-    def __init__(self, data_dir, sequence: str, *_, **__):
+    def __init__(self, data_dir, sequence: str, crop_a0: int, crop_a1: int,  *_, **__):
         self.sequence_id = str(sequence).zfill(2)
         self.kitti_sequence_dir = os.path.join(data_dir, "sequences", self.sequence_id)
         self.velodyne_dir = os.path.join(self.kitti_sequence_dir, "velodyne/")
 
         self.scan_files = sorted(glob.glob(self.velodyne_dir + "*.bin"))
         self.calibration = self.read_calib_file(os.path.join(self.kitti_sequence_dir, "calib.txt"))
+        self.crop_a0 = crop_a0
+        self.crop_a1 = crop_a1
 
         # Load GT Poses (if available)
         if int(sequence) < 11:
@@ -117,7 +119,7 @@ class KITTIOdometryDataset:
         #  points = points[points[:, 2] > -2.9]  # Remove the annoying reflections
         points = self.correct_kitti_scan(points)
 
-        points = self.cropsector(points, [-160.0, 160.0])
+        points = self.cropsector(points, [self.crop_a0, self.crop_a1])
         
         return points
 
