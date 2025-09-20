@@ -198,14 +198,14 @@ def kiss_icp_pipeline(
         callback=version_callback,
         is_eager=True,
     ),
-    crop_a0: int = typer.Option(
+    crop_a0: float = typer.Option(
         -1,
         "--crop-a0",
         show_default=False,
         help="a0 crop",
         rich_help_panel="Additional Options",
     ),
-    crop_a1: int = typer.Option(
+    crop_a1: float = typer.Option(
         -1,
         "--crop-a1",
         show_default=False,
