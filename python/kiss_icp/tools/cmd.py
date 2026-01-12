@@ -198,6 +198,14 @@ def kiss_icp_pipeline(
         callback=version_callback,
         is_eager=True,
     ),
+    fault_model: str = typer.Option(
+        "None",
+        "--fault_model",
+        help="[Optional] Specify a fault model to use (default: 'None')",
+        show_default=False,
+        rich_help_panel="Additional Options",
+    ),
+
 ):
     # Attempt to guess some common file extensions to avoid using the --dataloader flag
     if not dataloader:
@@ -223,6 +231,7 @@ def kiss_icp_pipeline(
             sequence=sequence,
             topic=topic,
             meta=meta,
+            fault_model=fault_model,
         ),
         config=config,
         visualize=visualize,
