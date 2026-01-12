@@ -24,16 +24,19 @@ import glob
 import os
 
 import numpy as np
+from lfi.apply_fault_model import apply_fault_model
 
 
 class KITTIOdometryDataset:
-    def __init__(self, data_dir, sequence: str, *_, **__):
+    def __init__(self, data_dir, sequence: str, fault_model: str, *_, **__):
         self.sequence_id = str(sequence).zfill(2)
         self.kitti_sequence_dir = os.path.join(data_dir, "sequences", self.sequence_id)
         self.velodyne_dir = os.path.join(self.kitti_sequence_dir, "velodyne/")
 
         self.scan_files = sorted(glob.glob(self.velodyne_dir + "*.bin"))
         self.calibration = self.read_calib_file(os.path.join(self.kitti_sequence_dir, "calib.txt"))
+
+        self.fault_model = fault_model
 
         # Load GT Poses (if available)
         if int(sequence) < 11:
@@ -67,7 +70,9 @@ class KITTIOdometryDataset:
         #  points = points[points[:, 2] > -2.9]  # Remove the annoying reflections
         points = self.correct_kitti_scan(points)
 
-        # Hier Punktwolkenmodifikation einfügen
+        if self.fault_model != "None":
+            # Apply fault model to the scan
+            points = apply_fault_model(points, self.fault_model)
         
         return points
 
