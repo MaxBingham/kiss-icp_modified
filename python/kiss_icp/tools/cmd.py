@@ -205,6 +205,20 @@ def kiss_icp_pipeline(
         show_default=False,
         rich_help_panel="Additional Options",
     ),
+    visibility: float = typer.Option(
+        0.1,
+        "--visibility",
+        help="[Optional] Visibility parameter for fog fault model (default: 0.1)",
+        show_default=False,
+        rich_help_panel="Additional Options",
+    ),
+    rain_rate: float = typer.Option(
+        10.0,
+        "--rain_rate",
+        help="[Optional] Rain rate parameter for rain fault model (default: 10.0)",
+        show_default=False,
+        rich_help_panel="Additional Options",
+    ),
 
 ):
     # Attempt to guess some common file extensions to avoid using the --dataloader flag
@@ -232,6 +246,8 @@ def kiss_icp_pipeline(
             topic=topic,
             meta=meta,
             fault_model=fault_model,
+            visibility=visibility,
+            rain_rate=rain_rate,
         ),
         config=config,
         visualize=visualize,
