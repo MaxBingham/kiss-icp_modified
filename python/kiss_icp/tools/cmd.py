@@ -213,6 +213,13 @@ def kiss_icp_pipeline(
         rich_help_panel="Additional Options",
     ),
     rain_rate: float = typer.Option(
+    fog_metric: str = typer.Option(
+        "distance",
+        "--fog_metric",
+        help="[Optional] Metric for fog fault model parametrization (default: distance)",
+        show_default=False,
+        rich_help_panel="Additional Options",
+    ),
         10.0,
         "--rain_rate",
         help="[Optional] Rain rate parameter for rain fault model (default: 10.0)",
@@ -248,12 +255,18 @@ def kiss_icp_pipeline(
             fault_model=fault_model,
             visibility=visibility,
             rain_rate=rain_rate,
+            fog_metric=fog_metric,
         ),
         config=config,
         visualize=visualize,
         n_scans=n_scans,
         jump=jump,
     ).run().print()
+    
+    # Save distance statistics after pipeline completes (for fog only)
+    if fault_model.lower() == "fog":
+        from lfi.apply_fault_model import save_distance_stats
+        save_distance_stats(visibility, fog_metric)
 
 
 def run():
